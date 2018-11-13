@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Memory</title>
+    </head>
+    <body>
+
+        <canvas id="canvas" width="760" height="610"></canvas>
+
+        <script type="text/javascript">
+
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.style.border = "1px";
+        canvas.style.margin = "50px auto";
+        canvas.style.display = "block";
+        var flippedTiles = [];
+        var numTries = 0;
+        var timeout;
+
+        function draw() {
+            for (var i = 0; i < tiles.length; i++) {
+                if (!tiles[i].isMatch) {
+                    tiles[i].drawnFaceDown();
+                    flippedTiles = [];
+                }
+            }
+        }
+        var Tile = function(x, y, face) {
+            this.x = x;
+            this.y = y;
+            this.face = face;
+            this.width = 140;
+        };
+
+        Tile.prototype.drawnFaceDown = function () {
+            var img = new Image();
+            var that = this;
+            this.isFaceUp = false;
+
+            ctx.lineWidth = 7;
+            ctx.fillStyle = "#66ccff";
+            ctx.strokeRect(this.x, this.y, this.width, this.width);
+            ctx.fillRect(this.x, this.y, this.width, this.width);
+            img.addEventListener('load', function() {
+                ctx.drawImage(img, that.x + 25, that.y + 25, 90, 90)
+            }, false);
+            img.src = 'pokeball-clipart-logo-pokemon-2.png';
+
+        };
+
+        Tile.prototype.drawnFaceUp = function () {
+            var img = new Image();
+            var that = this;
+            this.isFaceUp = true;
+
+            ctx.lineWidth = 7;
+            ctx.fillStyle = "#66ccff";
+            ctx.strokeRect(this.x, this.y, this.width, this.width);
+            ctx.fillRect(this.x, this.y, this.width, this.width);
+            img.addEventListener('load', function() {
+                ctx.drawImage(img, that.x, that.y, that.width, that.width)
+            }, false);
+            img.src = this.face;
+        };
+
+        Tile.prototype.isUnderMouse = function(x, y) {
+            return x >= this.x && x <= this.x + this.width &&
+                   y >= this.y && y <= this.y + this.width;
+        };
+
+        function getMousePos(canvas, evt) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x : evt.clientX - rect.left,
+                y : evt.clientY - rect.top
+            };
+        }
+
+        canvas.addEventListener('click', function(evt) {
+            var mousePos = getMousePos(canvas, evt);
+            console.log(mousePos)
+
+            for (var i = 0; i < tiles.length; i++) {
+                if (tiles[i].isUnderMouse(mousePos.x, mousePos.y)) {
+                    if (flippedTiles.length < 2 && !tiles[i].isFaceUp) {
+                        tiles[i].drawnFaceUp();
+                        flippedTiles.push(tiles[i]);
+                        if (flippedTiles.length === 2) {
+                            numTries++;
+                            if (flippedTiles[0].face === flippedTiles[1].face) {
+                                flippedTiles[0].isMatch = true;
+                                flippedTiles[1].isMatch = true;
+                            }
+                            timeout = setTimeout(draw, 500);
+                            console.log(flippedTiles[0].face);
+                        }
+                    }
+                }
+            }
+            var foundAllMatches = true;
+
+            for (var i = 0; i < tiles.length; i++) {
+                foundAllMatches = foundAllMatches && tiles[i].isMatch;
+            }
+            if (foundAllMatches) {
+                ctx.save();
+                ctx.font = "bold 70px sans-serif";
+                ctx.fillStyle = "black";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.strokeStyle = "white";
+                ctx.lineWidth = 5;
+                var centerX = 380;
+                var centerY = 305;
+                ctx.strokeText("Congratulation", centerX, centerY - 180);
+                ctx.fillText("Congratulation", centerX, centerY - 180);
+                ctx.font = "bold 30px sans-serif";
+                ctx.strokeText("You catch them all", centerX, centerY - 120);
+                ctx.fillText("You catch them all", centerX, centerY - 120);
+                ctx.restore();
+            }
+        })
+
+        var faces = [
+            "bulbizarre.jpg",
+            "carapuce.jpg",
+            "dracofeu.jpg",
+            "magicarpe.jpg",
+            "mew.jpg",
+            "mewto.jpg",
+            "pikachu.jpg",
+            "psychokwak.jpg",
+            "rondoudou.jpg",
+            "salameche.jpg"
+        ];
+
+        var selected = [];
+
+        for (var i = 0; i < 10; i++) {
+            var randomInd = Math.floor(Math.random(faces.length));
+            var face = faces[randomInd];
+            selected.push(face);
+            selected.push(face);
+            faces.splice(randomInd, 1);
+        }
+
+        selected.sort(function(){
+            return 0.5 - Math.random();
+        })
+
+        var tiles = [];
+        var nb_col = 5;
+        var nb_row = 4;
+
+        for (var i = 0; i < nb_col; i++) {
+            for (var j = 0; j < nb_row; j++) {
+                tiles.push(new Tile(i * 150 + 10, j * 150 + 10, selected.pop()));
+            }
+        }
+
+        for (var i = 0; i <  tiles.length; i++) {
+            tiles[i].drawnFaceDown();
+        }
+
+        console.log(tiles)
+
+
+        </script>
+
+    </body>
+</html>

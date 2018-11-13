@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="main.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="utf-8">
+        <title>Viewer Wikipedia</title>
+    </head>
+    <body onload="document.formulaire.input.focus();">
+        <div class="container">
+            <h1 id="text-logo">Wikipedia Viewer</h1>
+            <form name="formulaire">
+                <div class="">
+                    <label>Search Wikipedia for an article.<span class="cursor"></span></label>
+                    <input name="input" id="search" type="text" placeholder="-->">
+
+                </div>
+                <div class="">
+                    <input type="submit" id="submit">
+
+                </div>
+            </form>
+
+            <div class="search-results">
+
+            </div>
+
+
+            <!-- <div id="carre"></div> -->
+
+
+
+        </div>
+    </body>
+</html>
