@@ -8,7 +8,6 @@ $(document).ready(function() {
 
         event.preventDefault();
         search = $("#search").val();
-        console.log(search);
 
         var url = "https://fr.wikipedia.org/w/api.php?action=opensearch&limit=10&search=" + search;
 

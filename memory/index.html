@@ -80,7 +80,6 @@
 
         canvas.addEventListener('click', function(evt) {
             var mousePos = getMousePos(canvas, evt);
-            console.log(mousePos)
 
             for (var i = 0; i < tiles.length; i++) {
                 if (tiles[i].isUnderMouse(mousePos.x, mousePos.y)) {
@@ -94,7 +93,6 @@
                                 flippedTiles[1].isMatch = true;
                             }
                             timeout = setTimeout(draw, 500);
-                            console.log(flippedTiles[0].face);
                         }
                     }
                 }
@@ -163,8 +161,6 @@
         for (var i = 0; i <  tiles.length; i++) {
             tiles[i].drawnFaceDown();
         }
-
-        console.log(tiles)
 
 
         </script>
